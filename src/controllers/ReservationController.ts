@@ -1,12 +1,13 @@
-import type { IResponse, ReservationType, TypedRequest, TypedResponse } from '../types';
+import type { IResponse, ReservationType, TypedRequest } from '../types';
 import type { Response, Request } from 'express';
 import { Router } from 'express';
 import { Reservation } from '../entity/Reservation';
-import validate from '../utils/validate';
+import { validateReservation } from '../utils/validate';
 
 const router = Router();
 
-router.get('/', async (_, res: TypedResponse) => {
+//get all reservations
+router.get('/', async (_, res: Response<IResponse>) => {
   try {
     const reservations = await Reservation.find();
 
@@ -23,22 +24,26 @@ router.get('/', async (_, res: TypedResponse) => {
   }
 });
 
-router.post('/', validate, async (req: TypedRequest<ReservationType>, res: Response<IResponse>) => {
-  const reservation = await Reservation.findOne(req.body.reservation_id);
-
-  if (reservation)
+//get one reservation by reservation_id
+router.get('/:id', async (req: Request, res: Response<IResponse>) => {
+  if (!req.params.id)
     return res.status(400).json({
       data: null,
       status: 'error',
-      message: 'Reservation with that id already exists',
+      message: 'Please provide reservation_id as parameter',
     });
 
   try {
-    const reservation = await Reservation.create(req.body);
+    const reservation = await Reservation.findOne(req.params.id);
 
-    await Reservation.save(reservation);
+    if (!reservation)
+      return res.status(400).json({
+        data: null,
+        status: 'error',
+        message: 'Reservation with that id does not exist',
+      });
 
-    res.status(201).json({
+    res.status(200).json({
       data: reservation,
       status: 'success',
     });
@@ -51,7 +56,41 @@ router.post('/', validate, async (req: TypedRequest<ReservationType>, res: Respo
   }
 });
 
-router.put('/', validate, async (req: TypedRequest<ReservationType>, res: Response<IResponse>) => {
+//create reservation
+router.post(
+  '/',
+  validateReservation,
+  async (req: TypedRequest<ReservationType>, res: Response<IResponse>) => {
+    const reservation = await Reservation.findOne(req.body.reservation_id);
+
+    if (reservation)
+      return res.status(400).json({
+        data: null,
+        status: 'error',
+        message: 'Reservation with that id already exists',
+      });
+
+    try {
+      const reservation = await Reservation.create(req.body);
+
+      await Reservation.save(reservation);
+
+      res.status(201).json({
+        data: reservation,
+        status: 'success',
+      });
+    } catch (error) {
+      res.status(500).json({
+        data: null,
+        status: 'error',
+        message: error,
+      });
+    }
+  }
+);
+
+//update reservation
+router.put('/', validateReservation, async (req: TypedRequest<ReservationType>, res: Response<IResponse>) => {
   try {
     const reservation = await Reservation.findOne(req.body.reservation_id);
 
@@ -63,10 +102,10 @@ router.put('/', validate, async (req: TypedRequest<ReservationType>, res: Respon
       });
 
     await Reservation.merge(req.body as any);
-    await Reservation.save(reservation);
+    await Reservation.save(req.body as any);
 
-    res.status(201).json({
-      data: reservation,
+    res.status(200).json({
+      data: req.body,
       status: 'success',
     });
   } catch (error) {
@@ -78,6 +117,7 @@ router.put('/', validate, async (req: TypedRequest<ReservationType>, res: Respon
   }
 });
 
+//delete reservation
 router.delete('/:id', async (req: Request, res: Response<IResponse>) => {
   if (!req.params.id)
     return res.status(400).json({

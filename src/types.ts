@@ -24,3 +24,8 @@ export type ReservationType = {
   checking_time: Date;
   checkout_time: Date;
 };
+
+export type OverstayType = {
+  reservation_id: number;
+  overstayed_checkout_time: Date;
+};

@@ -2,14 +2,6 @@ import type { TypedResponse } from '../types';
 import Joi from 'joi';
 import { Request, NextFunction } from 'express';
 
-const options = {
-  errors: {
-    wrap: {
-      label: '',
-    },
-  },
-};
-
 const reservationSchema = Joi.object({
   reservation_id: Joi.number().required(),
   customer_id: Joi.number().required(),
@@ -20,12 +12,37 @@ const reservationSchema = Joi.object({
   checkout_time: Joi.date().required(),
 });
 
-export default (req: Request, res: TypedResponse, next: NextFunction) => {
-  // const { error } = reservationSchema.validate(req.body, options);
+export const validateReservation = (req: Request, res: TypedResponse, next: NextFunction) => {
   const { error } = reservationSchema.validate(req.body);
 
   if (error) {
-    console.log(error.details[0]);
+    return res.status(400).json({
+      data: null,
+      message: error.message,
+      status: 'error',
+    });
+  }
+
+  if (req.body.checkout_time < req.body.checking_time) {
+    return res.status(400).json({
+      data: null,
+      message: 'Your checkout time should not be before checking time',
+      status: 'error',
+    });
+  }
+
+  next();
+};
+
+const overstaySchema = Joi.object({
+  reservation_id: Joi.number().required(),
+  overstayed_checkout_time: Joi.date().required(),
+});
+
+export const overstayReservation = (req: Request, res: TypedResponse, next: NextFunction) => {
+  const { error } = overstaySchema.validate(req.body);
+
+  if (error) {
     return res.status(400).json({
       data: null,
       message: error.message,
