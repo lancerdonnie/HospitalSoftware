@@ -8,7 +8,10 @@
     "dev": "nodemon src/index.ts",
     "start": "node dist/index.js",
     "test": "jest --forceExit --detectOpenHandles  --watch",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- migration:generate -n",
+    "migration:run": "npm run typeorm -- migration:run"
   },
   "keywords": [],
   "author": "",
