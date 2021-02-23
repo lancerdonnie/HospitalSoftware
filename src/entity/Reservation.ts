@@ -23,7 +23,7 @@ export class Reservation extends BaseEntity {
   @PrimaryGeneratedColumn()
   reservation_id: number;
 
-  @Column({ type: 'enum', enum: RoomType })
+  @Column({ type: 'simple-enum', enum: RoomType })
   room_type: RoomType;
 
   @Column()
@@ -32,7 +32,7 @@ export class Reservation extends BaseEntity {
   @Column()
   amount_paid: number;
 
-  @Column({ type: 'enum', enum: Status })
+  @Column({ type: 'simple-enum', enum: Status })
   status: Status;
 
   @Column()
