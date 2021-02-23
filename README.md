@@ -2,9 +2,9 @@
 
 ![node version](https://img.shields.io/badge/node->=14.0.0-brightgreen.svg)
 
-> Calculates overstay fees for hospital bookings.
+> A restful api that calculates overstay fees for hospital bookings.
 
-## Visit [hospitalsoftware.herokuapp.com](https://hospitalsoftware.herokuapp.com) to see the live url!
+## Visit [hospitalsoftware.herokuapp.com](https://hospitalsoftware.herokuapp.com/reservation) to test the live api!
 
 ## **:package: Tools used**
 
@@ -23,7 +23,7 @@
 Before cloning the repo **be sure** you have installed:
 
 - [**NODE**](https://www.google.com/search?q=how+to+install+node) (version >=14.0.0)
-- [**MySql**]
+- MySql
 
 Then:
 
@@ -86,8 +86,10 @@ Additionally, to use the test.rest file, only if using vscode, install REST Clie
 
 ```bash
 docker build -t {imagename} .
-docker run --name {name}  -d -t {imagename} -p 5000:5000
+docker run -d -p 8080:5000 --name {name} {imagename}
 ```
+
+- Open on http://localhost
 
 ---
 
