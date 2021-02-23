@@ -1,0 +1,6 @@
+test.rest
+README.md
+node_modules
+dist
+src/migration
+src/tests

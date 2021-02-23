@@ -31,7 +31,7 @@ export const validateReservation = (req: Request, res: TypedResponse, next: Next
     });
   }
 
-  next();
+  return next();
 };
 
 const overstaySchema = Joi.object({
@@ -50,5 +50,5 @@ export const overstayReservation = (req: Request, res: TypedResponse, next: Next
     });
   }
 
-  next();
+  return next();
 };

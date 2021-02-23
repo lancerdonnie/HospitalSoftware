@@ -51,12 +51,12 @@ router.get(
         data.balance += reservation.amount_paid;
       }
 
-      res.status(200).json({
+      return res.status(200).json({
         data,
         status: 'success',
       });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         data: null,
         status: 'error',
         message: error,

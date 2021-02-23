@@ -1,4 +1,4 @@
-import express, { json } from 'express';
+import express from 'express';
 import cors from 'cors';
 import 'reflect-metadata';
 import { createConn } from './createConn';
@@ -9,7 +9,7 @@ import OverstayController from './controllers/OverstayController';
 
 const app = express();
 
-app.use(json());
+app.use(express.json());
 app.use(cors());
 app.use('/reservation', ReservationController);
 app.use(OverstayController);

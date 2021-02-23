@@ -1,6 +1,6 @@
-import { createConnection } from 'typeorm';
+const { createConnection } = require('typeorm');
 
-export const createConn = async () => {
+const createConn = async () => {
   try {
     await createConnection();
     console.log('Database Connected');
@@ -9,3 +9,5 @@ export const createConn = async () => {
     throw error;
   }
 };
+
+export { createConn };
