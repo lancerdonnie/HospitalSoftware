@@ -1,4 +1,4 @@
-# **:triangular_flag_on_post: OPEN SKY** (version 1.0.0)
+# **:triangular_flag_on_post: HOSPITAL SOFTWARE** (version 1.0.0)
 
 ![node version](https://img.shields.io/badge/node->=14.0.0-brightgreen.svg)
 
